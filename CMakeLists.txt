@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
-project(is-wireless_path_finding VERSION 1.0.0 LANGUAGE CXX)
+project(is-wireless_path_finding VERSION 1.0.0 LANGUAGES CXX)
 
-# C++ standrad in this project
+# C++ standard in this project
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -16,20 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Libraries
-seet(LIB_SOURCES
-     lib/src/path_finder.cpp
-     lib/src/matrix_utils.cpp
-     lib/src/performance_tracer.cpp)
-
-set(LIB_HEADERS
-     lib/include/path_finder.h
-     lib/include/matrix_utils.h
-     lib/include/performance_tracer.h
-     lib/include/path.h)
-
-# Create static library
-add_library(pathFinder_lib STATIC ${LIB_SOURCES} ${LIB_HEADERS})
-target_include_directories(pathfinder_lib PUBLIC lib/include)
+add_subdirectory(lib)
 
 # Main executable
 add_executable(pathFinder src/main.cpp)
@@ -44,7 +31,7 @@ target_link_libraries(pathFinder pathFinder_lib)
 
 # Testing
 option(BUILD_TESTS "Build test suites" ON)
-if(BUILD_TEST)
+if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
