@@ -1,7 +1,5 @@
 #include <iostream>
-#include <vector>
 #include <memory>
-#include <string>
 #include "path_finder.hpp"
 
 class Program
@@ -9,19 +7,19 @@ class Program
 public:
     Program ()
     {
-        std::cout << "Program initialized" << std::endl;
+        std::cout << "Program initialized\n";
     }
-    static void programMethod (void)
+    static void programMethod ()
     {
-        std::cout << "Hello World from Program class" << std::endl;
+        std::cout << "Hello World from Program class\n";
     }
 };
 
 int main (int argc, char* argv[])
 {
-    std::cout << "Hello World" << std::endl;
+    std::cout << "Hello World\n";
     std::unique_ptr<Program> newProgram = std::make_unique<Program>();
-    newProgram->programMethod();
+    Program::programMethod();
     std::unique_ptr<LibraryClass> newLibrary = std::make_unique<LibraryClass>();
     newLibrary->useLibrary();
 
