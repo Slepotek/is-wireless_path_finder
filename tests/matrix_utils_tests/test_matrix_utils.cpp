@@ -15,8 +15,7 @@
 #include <cassert>
 #include <iostream>
 #include "matrix_utils.hpp"
-
-#define UNUSED(x) ((void)(x))
+#include "../test_main.hpp"
 
 /**
  * @brief Tests basic matrix construction and property validation
