@@ -13,6 +13,7 @@ set_target_properties(test_program PROPERTIES
 # Add subdirectories for each test module
 add_subdirectory(matrix_utils_tests)
 add_subdirectory(path_tests)
+add_subdirectory(path_finder_utils_tests)
 # add_subdirectory(integration)     # Future
 
 # Find valgrind

@@ -8,6 +8,7 @@
 
 #include "matrix_utils.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <stdexcept>
 #include <array>
 
@@ -353,4 +354,9 @@ double MatrixWorld::getBlockedToUnblockedRatio() const
         throw std::invalid_argument("Division by zero");
     }
     return static_cast<double>(noOfBlockedCells) / noOfUnblockedCells;
+}
+
+size_t MatrixWorld::getTotalCells() const
+{
+    return worldMatrix.size();
 }

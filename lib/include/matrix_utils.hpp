@@ -162,5 +162,14 @@ public:
      * @throws std::invalid_argument If either count is zero (division by zero)
      */
     [[nodiscard]] double getBlockedToUnblockedRatio() const;
+
+    /**
+     * @brief Gets the total number of cells in the matrix
+     * @return Total cell count (rows × columns)
+     * 
+     * This method provides the overall matrix size, useful for bounds checking
+     * and validation in path finding algorithms. Equivalent to rows × cols.
+     */
+    [[nodiscard]] size_t getTotalCells() const;
 };
 #endif

@@ -105,6 +105,36 @@ void test_cell_operations() {
 }
 
 /**
+ * @brief Tests getTotalCells method functionality
+ * 
+ * Validates:
+ * - Correct calculation of total matrix size (rows × cols)
+ * - Consistency across different matrix dimensions
+ * - Proper return type and value range
+ * 
+ * @note This method is useful for bounds checking in path finding algorithms
+ */
+void test_get_total_cells() {
+    std::cout << "Running test_get_total_cells...\n";
+    
+    // Test various matrix sizes
+    MatrixWorld world1(3, 4);
+    assert(world1.getTotalCells() == 12);
+    
+    MatrixWorld world2(5, 5);
+    assert(world2.getTotalCells() == 25);
+    
+    MatrixWorld world3(2, 2);
+    assert(world3.getTotalCells() == 4);
+    
+    // Test after resize
+    world3.matrixResize(6, 3);
+    assert(world3.getTotalCells() == 18);
+    
+    std::cout << "✓ test_get_total_cells passed\n";
+}
+
+/**
  * @brief Tests 4-directional neighbor counting algorithm
  * 
  * Validates neighbor analysis functionality critical for path finding:
@@ -236,6 +266,7 @@ int main() {
     test_matrix_creation();
     test_matrix_exceptions();
     test_cell_operations();
+    test_get_total_cells();
     test_count_unblocked_neighbors();
     test_error_handling();
     

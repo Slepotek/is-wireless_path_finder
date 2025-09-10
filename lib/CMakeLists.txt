@@ -3,13 +3,13 @@ set(LIB_SOURCES
      src/matrix_utils.cpp
      src/path.cpp
     #  src/performance_tracer.cpp
-     src/path_finder.cpp)
+     src/path_finder_utils.cpp)
 
 set(LIB_HEADERS
      include/matrix_utils.hpp
      include/path.hpp
     #  include/performance_tracer.hpp
-     include/path_finder.hpp)
+     include/path_finder_utils.hpp)
 
 # Create static library
 add_library(pathFinder_lib STATIC ${LIB_SOURCES} ${LIB_HEADERS})
