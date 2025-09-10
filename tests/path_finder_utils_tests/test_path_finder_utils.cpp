@@ -275,6 +275,43 @@ void testScoringAlgorithm()
 }
 
 /**
+ * @brief Tests getIsExhausted method functionality
+ * 
+ * Validates exhaustion state tracking:
+ * - Initial state should be false (not exhausted)
+ * - State remains false after partial consumption
+ * - State becomes true after complete exhaustion
+ * - State persists correctly across multiple calls
+ * 
+ * @note Tests the core stateful behavior for multi-call scenarios
+ */
+void testGetIsExhausted()
+{
+    std::cout << "Testing getIsExhausted method..." << std::endl;
+
+    MatrixWorld world(2, 2); // 4 total cells
+    PathFinderUtils pathFinder;
+
+    // Initial state - should not be exhausted
+    assert(!pathFinder.getIsExhausted());
+
+    // Get first batch - should still not be exhausted
+    auto firstBatch = pathFinder.findStartingPointCandidates(world, 2);
+    assert(firstBatch.size() == 2);
+    assert(!pathFinder.getIsExhausted());
+
+    // Get remaining candidates - should now be exhausted
+    auto secondBatch = pathFinder.findStartingPointCandidates(world, 4);
+    assert(secondBatch.size() == 2); // Only 2 remaining
+    assert(pathFinder.getIsExhausted());
+
+    // Verify exhausted state persists
+    assert(pathFinder.getIsExhausted());
+
+    std::cout << "✓ getIsExhausted test passed" << std::endl;
+}
+
+/**
  * @brief Main test runner for PathFinderUtils
  * 
  * Executes all test functions and reports results.
@@ -292,6 +329,7 @@ int main()
         testQueueExhaustion();
         testExceptionHandling();
         testScoringAlgorithm();
+        testGetIsExhausted();
 
         std::cout << "\n✅ All PathFinderUtils tests passed successfully!" << std::endl;
         return 0;

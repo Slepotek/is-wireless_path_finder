@@ -273,6 +273,7 @@ uint16_t MatrixWorld::countUnblockedNeighbors(uint16_t row, uint16_t col) const
     uint16_t count = 0;
     
     // 4-directional offsets: up, right, down, left
+    // Keeping standard ints for arithmetic
     std::array<std::array<int, 2>, 4> directions = {{{-1, 0}, {0, 1}, {1, 0}, {0, -1}}};
 
     for (auto & direction : directions) {

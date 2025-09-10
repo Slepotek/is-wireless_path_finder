@@ -70,6 +70,21 @@ public:
     [[nodiscard]] std::vector<std::pair<std::uint16_t, uint16_t>> findStartingPointCandidates(
         MatrixWorld &matrixWorld,
         uint8_t numberOfCandidates);
-};
 
+    /**
+     * @brief Checks if all starting point candidates have been exhausted
+     * @return true if no more candidates are available, false otherwise
+     * 
+     * This method allows callers to determine when the priority queue has been
+     * completely consumed. Useful for implementing retry loops that continue
+     * until all possible starting points have been attempted.
+     * 
+     * @note Returns false initially and after queue population, true only after
+     * all candidates have been retrieved via findStartingPointCandidates()
+     */
+    [[nodiscard]] bool getIsExhausted() const
+    {
+        return isExhausted;
+    }
+};
 #endif
