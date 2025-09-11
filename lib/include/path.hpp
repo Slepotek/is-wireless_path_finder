@@ -107,6 +107,14 @@ public:
     void clear();
 
     /**
+     * @brief Prints the path coordinates to standard output
+     * 
+     * Outputs the path in a readable format for debugging and visualization.
+     * Each coordinate is printed as (row, col).
+     */
+    void printPath() const;
+
+    /**
      * @brief Gets iterator to the beginning of the path
      * @return Iterator pointing to the first coordinate
      * 

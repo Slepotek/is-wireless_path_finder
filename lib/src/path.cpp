@@ -7,6 +7,7 @@
  */
 
 #include "path.hpp"
+#include <iostream>
 #include <stdexcept>
 
 /**
@@ -81,8 +82,8 @@ std::pair<uint16_t, uint16_t> Path::getCurrentCoordinate() const
  * 
  * Algorithm:
  * - Empty or single-coordinate paths are trivially contiguous
- * - For each consecutive pair, calculate absolute differences safely
- * - Adjacent cells have exactly one coordinate differing by 1, other by 0
+ * - For each consecutive pair, calculate Manhattan distance safely
+ * - Adjacent cells have Manhattan distance of exactly 1 (one step away)
  * 
  * @return true if entire path is contiguous, false if any gap exists
  */
@@ -96,8 +97,13 @@ bool Path::isContiguous() const
     {
         auto [row1, col1] = path[i - 1];
         auto [row2, col2] = path[i];
-        if (((row1 != row2) || (std::abs(col1 < col2 ? (col2 - col1) : (col1 - col2)) != 1)) &&
-            ((col1 != col2) || (std::abs(row1 < row2 ? (row2 - row1) : (row1 - row2)) != 1)))
+        
+        // Calculate Manhattan distance using underflow-safe arithmetic
+        uint16_t row_dist = (row1 > row2) ? (row1 - row2) : (row2 - row1);
+        uint16_t col_dist = (col1 > col2) ? (col1 - col2) : (col2 - col1);
+        
+        // Adjacent cells have Manhattan distance of exactly 1
+        if ((row_dist + col_dist) != 1)
         {
             return false; // Not contiguous if not adjacent
         }
@@ -138,4 +144,20 @@ size_t Path::getLength() const
 void Path::clear()
 {
     path.clear();
+}
+
+/**
+ * @brief Prints the path coordinates to standard output
+ * 
+ * Outputs the path in a readable format for debugging and visualization.
+ * Each coordinate is printed as (row, col).
+ */
+void Path::printPath() const
+{
+    std::cout << "Path coordinates: ";
+    for (const auto &coord : path)
+    {
+        std::cout << "(" << coord.first << ", " << coord.second << ") ";
+    }
+    std::cout << std::endl;
 }

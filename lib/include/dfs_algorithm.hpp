@@ -9,32 +9,11 @@
 #ifndef DFS_ALGORITHM_H
 #define DFS_ALGORITHM_H
 
+#include "Ipath_algorithm.hpp"
 #include "matrix_utils.hpp"
 #include "path.hpp"
 #include <cstdint>
 #include <vector>
-
-// Type-safe structures for clarity and error avoidance
-
-/**
- * @brief Type-safe wrapper for path length values
- * 
- * Prevents accidental parameter swapping and improves code readability.
- * Contains a single uint16_t value representing the desired path length.
- */
-struct PathLength {
-    uint16_t value;
-};
-
-/**
- * @brief Type-safe wrapper for maximum starting points
- * 
- * Prevents accidental parameter swapping and improves code readability.
- * Contains a uint16_t value with default of 5 starting points to try.
- */
-struct MaxStartingPoints {
-    uint16_t value = 5; // Default value
-};
 
 /**
  * @class DFSAlgorithm
@@ -43,7 +22,7 @@ struct MaxStartingPoints {
  * Implements DFS with backtracking to find paths of specified length in a matrix.
  * Uses smart starting point selection and integrates with existing components.
  */
-class DFSAlgorithm
+class DFSAlgorithm : public PathAlgorithm
 {
 public:
     /**
@@ -64,9 +43,15 @@ public:
      * Path result2 = dfs.findViablePath(world, {8});      // path length 8, default 5 starting points
      * @endcode
      */
-    [[nodiscard]] Path findViablePath(MatrixWorld &matrixWorld, 
-                                      PathLength pathLength, 
-                                      MaxStartingPoints maxStartingPoints = {});
+    [[nodiscard]] Path findViablePath(const MatrixWorld &matrixWorld,
+                                      PathLength pathLength,
+                                      MaxStartingPoints maxStartingPoints = {}) override;
+
+    /** @brief Returns the name of the algorithm */
+    [[nodiscard]] std::string getAlgorithmName() const override
+    {
+        return "Depth-First Search (DFS) Algorithm";
+    }
 
 private:
     /**
@@ -77,7 +62,7 @@ private:
      * @param targetLength Target path length
      * @return true if target length reached, false otherwise
      */
-    bool dfsRecursive(MatrixWorld &matrixWorld,
+    bool dfsRecursive(const MatrixWorld &matrixWorld,
                       Path &currentPath,
                       std::vector<std::vector<bool>> &visited,
                       uint16_t targetLength);

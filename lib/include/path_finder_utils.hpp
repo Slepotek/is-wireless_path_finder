@@ -68,7 +68,7 @@ public:
      * - Only 4-directional neighbors are considered (up, down, left, right)
      */
     [[nodiscard]] std::vector<std::pair<std::uint16_t, uint16_t>> findStartingPointCandidates(
-        MatrixWorld &matrixWorld,
+        const MatrixWorld &matrixWorld,
         uint8_t numberOfCandidates);
 
     /**

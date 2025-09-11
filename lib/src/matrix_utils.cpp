@@ -357,6 +357,15 @@ double MatrixWorld::getBlockedToUnblockedRatio() const
     return static_cast<double>(noOfBlockedCells) / noOfUnblockedCells;
 }
 
+/**
+ * @brief Returns total number of cells in the matrix
+ * 
+ * O(1) operation using vector::size() method.
+ * Equivalent to rows × cols but uses actual container size.
+ * Useful for validation and capacity calculations.
+ * 
+ * @return Total cell count in the matrix
+ */
 size_t MatrixWorld::getTotalCells() const
 {
     return worldMatrix.size();

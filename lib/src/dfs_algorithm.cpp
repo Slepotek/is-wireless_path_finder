@@ -11,7 +11,23 @@
 #include <stdexcept>
 #include <array>
 
-Path DFSAlgorithm::findViablePath(MatrixWorld &matrixWorld, 
+/**
+ * @brief Finds a viable path using DFS with smart starting point selection
+ * @param matrixWorld Reference to the matrix world to search in
+ * @param pathLength Target path length wrapped in type-safe structure
+ * @param maxStartingPoints Maximum starting points to try per batch
+ * @return Path object containing found path (empty if no solution found)
+ * @throws std::invalid_argument If pathLength is zero or exceeds matrix size
+ * 
+ * Implementation uses multi-call stateful integration with PathFinderUtils:
+ * 1. Validates input parameters for correctness
+ * 2. Iteratively requests starting point candidates until exhausted
+ * 3. For each candidate, attempts DFS path finding with backtracking
+ * 4. Returns first successful path or empty path if no solution exists
+ * 
+ * Complexity: O(4^L × S) where L is path length and S is starting points tried
+ */
+Path DFSAlgorithm::findViablePath(const MatrixWorld &matrixWorld, 
                                   PathLength pathLength, 
                                   MaxStartingPoints maxStartingPoints)
 {
@@ -50,7 +66,27 @@ Path DFSAlgorithm::findViablePath(MatrixWorld &matrixWorld,
     return {};
 }
 
-bool DFSAlgorithm::dfsRecursive(MatrixWorld &matrixWorld,
+/**
+ * @brief Recursive DFS implementation with backtracking for path finding
+ * @param matrixWorld Reference to the matrix world for bounds and cell checking
+ * @param currentPath Reference to path being built (modified during recursion)
+ * @param visited Reference to visited cells matrix (modified during recursion)
+ * @param targetLength Target path length to achieve
+ * @return true if target length reached, false if no valid path from current state
+ * 
+ * Core recursive algorithm implementing depth-first search with backtracking:
+ * 1. Base case: Returns true when target length is reached
+ * 2. Explores all 4 directions (up, down, left, right) from current position
+ * 3. For each valid unvisited neighbor:
+ *    - Marks as visited and adds to path
+ *    - Recursively searches from new position
+ *    - Backtracks if recursive call fails (removes from path, marks unvisited)
+ * 4. Returns false if no valid path found from current position
+ * 
+ * Uses safe integer arithmetic with bounds checking to prevent overflow.
+ * Maintains path contiguity through 4-directional movement only.
+ */
+bool DFSAlgorithm::dfsRecursive(const MatrixWorld &matrixWorld,
                                 Path &currentPath,
                                 std::vector<std::vector<bool>> &visited,
                                 uint16_t targetLength)

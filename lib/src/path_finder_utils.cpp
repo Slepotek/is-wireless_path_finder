@@ -10,13 +10,47 @@
 #include <stdexcept>
 #include <vector>
 
+/**
+ * @brief Default constructor initializes empty priority queue and exhaustion state
+ * 
+ * Initializes PathFinderUtils with empty priority queue and sets isExhausted to false.
+ * Priority queue will be lazily populated on first call to findStartingPointCandidates().
+ * This approach avoids unnecessary computation if the object is created but never used.
+ */
 // Priority queue is automatically initialized as empty by default constructor
 // isExhausted flag is initialized to false by member initializer
 PathFinderUtils::PathFinderUtils() = default;
 
+/**
+ * @brief Finds and returns prioritized starting point candidates for path finding
+ * @param matrixWorld Reference to the matrix world to analyze
+ * @param numberOfCandidates Number of candidates to return (1-255)
+ * @return Vector of coordinate pairs representing best starting points
+ * @throws std::invalid_argument If numberOfCandidates is zero or matrix is fully blocked
+ * @throws std::length_error If numberOfCandidates exceeds total matrix cells
+ * @throws std::runtime_error If all candidates have been exhausted from previous calls
+ * 
+ * Multi-call stateful algorithm that maintains internal priority queue:
+ * 1. **Lazy Initialization**: Populates priority queue on first call only
+ * 2. **Scoring System**: Ranks cells by unblocked neighbor count (0-4 neighbors)
+ * 3. **Batch Processing**: Returns requested number of highest-scored candidates
+ * 4. **Exhaustion Tracking**: Marks when all candidates have been consumed
+ * 
+ * **Stateful Behavior:**
+ * - First call: Scans entire matrix and builds priority queue
+ * - Subsequent calls: Returns next batch from existing queue
+ * - Final call: Returns remaining candidates and sets exhaustion flag
+ * 
+ * **Integration Pattern:**
+ * Designed for multi-call usage with DFS algorithm - call repeatedly until
+ * getIsExhausted() returns true to try all possible starting points.
+ * 
+ * **Performance:** O(N×M) for first call, O(k) for subsequent calls where k is numberOfCandidates
+ */
 // Default constructor - initializes an empty priority queue and sets isExhausted to false
-std::vector<std::pair<std::uint16_t, uint16_t>> PathFinderUtils::findStartingPointCandidates(MatrixWorld &matrixWorld,
-                                                                                             uint8_t numberOfCandidates)
+std::vector<std::pair<std::uint16_t, uint16_t>> PathFinderUtils::findStartingPointCandidates(
+    const MatrixWorld &matrixWorld,
+    uint8_t numberOfCandidates)
 {
     // Input validation - ensure numberOfCandidates is valid
     if (numberOfCandidates == 0)
