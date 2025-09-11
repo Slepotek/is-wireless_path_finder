@@ -8,8 +8,13 @@
 
 #include "cli_utils.hpp"
 #include <cstddef>
+#include <cstdio>
 #include <iostream>
 #include <regex>
+#include <stdexcept>
+#include <string> 
+#include <fstream>
+#include <sstream>
 
 /**
  * @brief Prints comprehensive help information for the CLI application
@@ -19,10 +24,10 @@
  * specifies --help or -h flags.
  */
 void printHelp() {
-    std::cout << R"(is-wireless - Adaptive Path Finding in NxM Matrix
+    std::cout << R"(pathFinder - Adaptive Path Finding in NxM Matrix
 
 USAGE:
-    is-wireless --rows R --cols C --pathLength N [OPTIONS]
+    pathFinder --rows R --cols C --pathLength N [OPTIONS]
 
 REQUIRED:
     --rows R                Number of matrix rows (e.g., --rows 5)
@@ -32,12 +37,23 @@ REQUIRED:
 OPTIONAL:
     --maxStartingPoints N   Maximum starting points to try (default: 5)
     --blockedCells COORDS   Blocked cell coordinates (e.g., --blockedCells {1,0} {2,1})
+    --blockedCellsFile FILE Path to file containing blocked cell coordinates
     --help, -h              Show this help message
 
 EXAMPLES:
-    is-wireless --rows 5 --cols 5 --pathLength 6
-    is-wireless --rows 8 --cols 8 --pathLength 12 --blockedCells {1,0} {2,0} {1,1}
-    is-wireless --rows 10 --cols 10 --pathLength 15 --maxStartingPoints 10
+    pathFinder --rows 5 --cols 5 --pathLength 6
+    pathFinder --rows 8 --cols 8 --pathLength 12 --blockedCells {1,0} {2,0} {1,1}
+    pathFinder --rows 10 --cols 10 --pathLength 15 --maxStartingPoints 10
+    pathFinder --rows 100 --cols 100 --pathLength 50 --blockedCellsFile blocked_cells.txt
+
+BLOCKED CELLS FILE FORMAT:
+    Each line should contain: row,col
+    Lines starting with # are treated as comments
+    Example file content:
+        # Blocked cells for test matrix
+        0,1
+        1,0
+        2,2
 
 NOTES:
     - Matrix cells are 0-indexed
@@ -63,11 +79,10 @@ NOTES:
  * - {0,1} - Standard format with braces
  * - 0,1   - Shell-expanded format (braces added automatically)
  */
-void extractBlockedCells(size_t &index, size_t argc, const std::vector<std::string> &argv, CLIParameters &params)
+static void extractBlockedCells(size_t &index, size_t argc, const std::vector<std::string> &argv, CLIParameters &params)
 {
     while (index + 1 < argc && argv[index + 1][0] != '-')
     {
-
         std::string cellStr = argv[++index];
         // Handle shell brace expansion: "0,0" instead of "{0,0}"
         if (cellStr.find(',') != std::string::npos && cellStr[0] != '{')
@@ -88,6 +103,44 @@ void extractBlockedCells(size_t &index, size_t argc, const std::vector<std::stri
             std::cerr << "Invalid blocked cell format: " << cellStr << std::endl;
             std::cerr << "Expected format: {row,col}" << std::endl;
             break;
+        }
+    }
+}
+
+static void extractBlockedCellsFromFile(const std::string &filePath, CLIParameters &params)
+{
+    std::ifstream file(filePath);
+
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Can not open file: " + filePath);
+        exit(1);
+    }
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        // Skip empty lines and comments
+        if (line.empty() || line[0] == '#')
+        {
+            continue;
+        }
+        
+        std::istringstream iss(line);
+        std::string rowStr;
+        std::string colStr;
+
+        if (std::getline(iss, rowStr, ',') && std::getline(iss, colStr))
+        {
+            try
+            {
+                params.blockedCells.emplace_back(static_cast<uint16_t>(std::stoi(rowStr)),
+                                                 static_cast<uint16_t>(std::stoi(colStr)));
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "Invalid coordinate format: " << rowStr << "," << colStr << std::endl;
+            }
         }
     }
 }
@@ -113,6 +166,12 @@ void extractBlockedCells(size_t &index, size_t argc, const std::vector<std::stri
  */
 CLIParameters CLIParser(size_t argc, std::vector<std::string> argv) {
     CLIParameters params;
+    // no arguments provided, print help and exit
+    if (argc == 1) {
+        printHelp();
+        exit(0);
+    }
+
     for (size_t index = 0; index < argc; ++index) {
         if (argv[index] == std::string("--help") || argv[index] == std::string("-h")) {
             printHelp();
@@ -132,6 +191,9 @@ CLIParameters CLIParser(size_t argc, std::vector<std::string> argv) {
         }
         else if (argv[index] == std::string("--blockedCells") && index + 1 < argc) {
             extractBlockedCells(index, argc, argv, params);
+        }
+        else if (argv[index] == std::string("--blockedCellsFile") && index + 1 < argc) {
+            extractBlockedCellsFromFile(argv[++index], params);
         }
     }
     return params;

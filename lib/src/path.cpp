@@ -7,6 +7,7 @@
  */
 
 #include "path.hpp"
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 
@@ -97,11 +98,11 @@ bool Path::isContiguous() const
     {
         auto [row1, col1] = path[i - 1];
         auto [row2, col2] = path[i];
-        
+
         // Calculate Manhattan distance using underflow-safe arithmetic
         uint16_t row_dist = (row1 > row2) ? (row1 - row2) : (row2 - row1);
         uint16_t col_dist = (col1 > col2) ? (col1 - col2) : (col2 - col1);
-        
+
         // Adjacent cells have Manhattan distance of exactly 1
         if ((row_dist + col_dist) != 1)
         {
@@ -154,10 +155,31 @@ void Path::clear()
  */
 void Path::printPath() const
 {
-    std::cout << "Path coordinates: ";
-    for (const auto &coord : path)
+    if (path.size() > MAX_PATH_PRINT_LENGTH)
     {
-        std::cout << "(" << coord.first << ", " << coord.second << ") ";
+        std::cout << "Path is too long to display." << std::endl;
+        std::string filename = "path_coordinates.txt";
+        std::cout << "Writing path coordinates to file: " << filename << std::endl;
+        std::ofstream file(filename);
+        if (!file.is_open())
+        {
+            std::cerr << "Failed to open file for writing path coordinates: " << filename << std::endl;
+            return;
+        }
+        for (const auto &coord : path)
+        {
+            file << "(" << coord.first << "," << coord.second << ")\n";
+        }
+        file.close();
+        std::cout << "Path coordinates written to file successfully." << std::endl;
     }
-    std::cout << std::endl;
+    else
+    {
+        std::cout << "Path coordinates: ";
+        for (const auto &coord : path)
+        {
+            std::cout << "(" << coord.first << ", " << coord.second << ") ";
+        }
+        std::cout << std::endl;
+    }
 }

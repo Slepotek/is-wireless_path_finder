@@ -31,8 +31,8 @@
  * 
  * @note Tests the fundamental path state after construction
  */
-void test_path_creation() {
-    std::cout << "Running test_path_creation...\n";
+void testPathCreation() {
+    std::cout << "Running testPathCreation...\n";
     
     Path path;
     std::pair<uint16_t, uint16_t> ref = {5, 10};
@@ -45,7 +45,7 @@ void test_path_creation() {
     assert(path.getLength() == 1);
     assert(path.getCurrentCoordinate() == ref);
 
-    std::cout << "✓ test_path_creation passed\n";
+    std::cout << "✓ testPathCreation passed\n";
 }
 
 /**
@@ -58,8 +58,8 @@ void test_path_creation() {
  * 
  * @note Uses specific exception type catching to verify correct error handling
  */
-void test_path_exceptions() {
-    std::cout << "Running test_path_exceptions...\n";
+void testPathExceptions() {
+    std::cout << "Running testPathExceptions...\n";
 
     Path path;
     
@@ -81,7 +81,7 @@ void test_path_exceptions() {
         std::cout << "Caught expected exception: " << e.what() << "\n";
     }
 
-    std::cout << "✓ test_path_exceptions passed\n";
+    std::cout << "✓ testPathExceptions passed\n";
 }
 
 /**
@@ -95,8 +95,8 @@ void test_path_exceptions() {
  * 
  * @note Tests the core DFS backtracking operations
  */
-void test_path_operations() {
-    std::cout << "Running test_path_operations...\n";
+void testPathOperations() {
+    std::cout << "Running testPathOperations...\n";
     
     Path path;
     
@@ -121,7 +121,7 @@ void test_path_operations() {
     assert(path.isEmpty() == true);
     assert(path.getLength() == 0);
     
-    std::cout << "✓ test_path_operations passed\n";
+    std::cout << "✓ testPathOperations passed\n";
 }
 
 /**
@@ -135,8 +135,8 @@ void test_path_operations() {
  * 
  * @note Critical for DFS pathfinding algorithm validation
  */
-void test_path_contiguity() {
-    std::cout << "Running test_path_contiguity...\n";
+void testPathContiguity() {
+    std::cout << "Running testPathContiguity...\n";
     
     Path path;
     
@@ -161,7 +161,7 @@ void test_path_contiguity() {
     invalid_path.addCoordinate(2, 2);  // Not adjacent
     assert(invalid_path.isContiguous() == false);
     
-    std::cout << "✓ test_path_contiguity passed\n";
+    std::cout << "✓ testPathContiguity passed\n";
 }
 
 /**
@@ -218,8 +218,8 @@ void test_path_iterators() {
  *
  * @note Critical test for preventing underflow bugs in contiguity checking
  */
-void test_path_contiguity_edge_cases() {
-    std::cout << "Running test_path_contiguity_edge_cases...\n";
+void testPathContiguityEdgeCases() {
+    std::cout << "Running testPathContiguityEdgeCases...\n";
 
     Path path;
 
@@ -237,7 +237,7 @@ void test_path_contiguity_edge_cases() {
     path.addCoordinate(7, 5);   // Adjacent up (row1=8 > row2=7)
     assert(path.isContiguous() == true);
 
-    std::cout << "✓ test_path_contiguity_edge_cases passed\n";
+    std::cout << "✓ testPathContiguityEdgeCases passed\n";
 }
 
 /**
@@ -255,12 +255,12 @@ void test_path_contiguity_edge_cases() {
 int main() {
     std::cout << "\n=== Running Path Tests ===\n";
     
-    test_path_creation();
-    test_path_exceptions();
-    test_path_operations();
-    test_path_contiguity();
+    testPathCreation();
+    testPathExceptions();
+    testPathOperations();
+    testPathContiguity();
     test_path_iterators();
-    test_path_contiguity_edge_cases();
+    testPathContiguityEdgeCases();
     
     std::cout << "=== All Path Tests Passed ===\n\n";
     return 0;

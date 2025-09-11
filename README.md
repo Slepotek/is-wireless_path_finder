@@ -96,19 +96,19 @@ make test_proj
 
 ```bash
 # Basic path finding
-is-wireless --rows 5 --cols 5 --pathLength 6
+pathFinder --rows 5 --cols 5 --pathLength 6
 
 # Complex scenario with obstacles
-is-wireless --rows 10 --cols 10 --pathLength 15 --blockedCells "{0,0}" "{1,1}" "{2,2}"
+pathFinder --rows 10 --cols 10 --pathLength 15 --blockedCells "{0,0}" "{1,1}" "{2,2}"
 
 # Thorough search with more starting points
-is-wireless --rows 8 --cols 8 --pathLength 20 --maxStartingPoints 15
+pathFinder --rows 8 --cols 8 --pathLength 20 --maxStartingPoints 15
 ```
 
 ## 🧪 Testing
 
 ### Test Suite Overview
-- **11 comprehensive tests** covering all components
+- **comprehensive tests** covering all components
 - **Memory leak detection** using Valgrind integration
 - **Exception handling validation** for all error conditions
 - **Edge case coverage** including underflow prevention
@@ -127,6 +127,16 @@ cd build
 ./test_path_finder_utils # Starting point selection
 ./test_dfs_algorithm    # DFS pathfinding algorithm
 ./test_cli_utils        # Command line parsing
+```
+
+```bash
+# Run black box tests
+cd tools
+. pythonTests.sh
+
+# The python virtual environment will be scaffolded
+# User will be prompted for the scope of the tests
+# (small (100x100 matrix), medium (200x200 matrix), large (500x500 matrix))
 ```
 
 ### Test Results

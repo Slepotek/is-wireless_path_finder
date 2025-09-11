@@ -28,8 +28,8 @@
  * 
  * @note Tests the fundamental matrix state after construction
  */
-void test_matrix_creation() {
-    std::cout << "Running test_matrix_creation...\n";
+void testMatrixCreation() {
+    std::cout << "Running testMatrixCreation...\n";
     
     MatrixWorld matrix(3, 4);
     assert(matrix.getRowSize() == 4);  // cols = row width
@@ -38,7 +38,7 @@ void test_matrix_creation() {
     assert(matrix.getNoOfBlockedCells() == 0);
     assert(matrix.matrixIsEmpty() == true);
     
-    std::cout << "✓ test_matrix_creation passed\n";
+    std::cout << "✓ testMatrixCreation passed\n";
 }
 
 /**
@@ -51,8 +51,8 @@ void test_matrix_creation() {
  * 
  * @note Uses specific exception type catching to verify correct error handling
  */
-void test_matrix_exceptions() {
-    std::cout << "Running test_matrix_exceptions...\n";
+void testMatrixExceptions() {
+    std::cout << "Running testMatrixExceptions...\n";
 
     try {
         MatrixWorld matrix(0, 5);  // Invalid: zero rows
@@ -62,7 +62,7 @@ void test_matrix_exceptions() {
         // Expected behavior - constructor threw appropriate exception
     }
 
-    std::cout << "✓ test_matrix_exceptions passed\n";
+    std::cout << "✓ testMatrixExceptions passed\n";
 }
 
 /**
@@ -77,8 +77,8 @@ void test_matrix_exceptions() {
  * 
  * @note Tests the core cell state management that path finding relies on
  */
-void test_cell_operations() {
-    std::cout << "Running test_cell_operations...\n";
+void testCellOperations() {
+    std::cout << "Running testCellOperations...\n";
     
     MatrixWorld matrix(3, 3);
     
@@ -101,7 +101,7 @@ void test_cell_operations() {
     assert(matrix.getNoOfBlockedCells() == 0);    // Should return to 0
     assert(matrix.matrixIsEmpty() == true);       // Matrix empty again
     
-    std::cout << "✓ test_cell_operations passed\n";
+    std::cout << "✓ testCellOperations passed\n";
 }
 
 /**
@@ -114,8 +114,8 @@ void test_cell_operations() {
  * 
  * @note This method is useful for bounds checking in path finding algorithms
  */
-void test_get_total_cells() {
-    std::cout << "Running test_get_total_cells...\n";
+void testGetTotalCells() {
+    std::cout << "Running testGetTotalCells...\n";
     
     // Test various matrix sizes
     MatrixWorld world1(3, 4);
@@ -131,7 +131,7 @@ void test_get_total_cells() {
     world3.matrixResize(6, 3);
     assert(world3.getTotalCells() == 18);
     
-    std::cout << "✓ test_get_total_cells passed\n";
+    std::cout << "✓ testGetTotalCells passed\n";
 }
 
 /**
@@ -147,8 +147,8 @@ void test_get_total_cells() {
  * @note This algorithm is essential for starting point selection in path finding
  * @note Tests 4-directional movement only (up, down, left, right)
  */
-void test_count_unblocked_neighbors() {
-    std::cout << "Running test_count_unblocked_neighbors...\n";
+void testCountUnblockedNeighbors() {
+    std::cout << "Running testCountUnblockedNeighbors...\n";
     
     MatrixWorld matrix(3, 3);
     
@@ -171,7 +171,7 @@ void test_count_unblocked_neighbors() {
     // Corner (0,0) should now have 0 unblocked neighbors (both adjacent cells blocked)
     assert(matrix.countUnblockedNeighbors(0, 0) == 0);
     
-    std::cout << "✓ test_count_unblocked_neighbors passed\n";
+    std::cout << "✓ testCountUnblockedNeighbors passed\n";
 }
 
 /**
@@ -186,8 +186,8 @@ void test_count_unblocked_neighbors() {
  * 
  * @note Tests both exception throwing and bool return error handling patterns
  */
-void test_error_handling() {
-    std::cout << "Running test_error_handling...\n";
+void testErrorHandling() {
+    std::cout << "Running testErrorHandling...\n";
     
     // Test constructor exceptions
     try {
@@ -246,7 +246,40 @@ void test_error_handling() {
     // Test neighbor counting with invalid coordinates
     assert(matrix.countUnblockedNeighbors(10, 10) == 0); // Should return 0 for invalid coords
     
-    std::cout << "✓ test_error_handling passed\n";
+    std::cout << "✓ testErrorHandling passed\n";
+}
+
+/**
+ * @brief Tests setCell behavior when setting cell to same state
+ * 
+ * Validates that setCell returns true when called with the same state
+ * the cell already has (no state change). This tests the fixed logic
+ * where the method should return true for successful operations regardless
+ * of whether the state actually changed.
+ * 
+ * @note Tests the fix for the logic error where setCell returned false
+ * when cell was already in desired state
+ */
+void testSetCellSameState() {
+    std::cout << "Running testSetCellSameState...\n";
+    
+    MatrixWorld matrix(2, 2);
+    
+    // Initially all cells are unblocked (false)
+    // Setting to same state should return true
+    assert(matrix.setCell(0, 0, false) == true);  // Already unblocked, should return true
+    assert(matrix.isUnblocked(0, 0) == true);     // Should still be unblocked
+    assert(matrix.getNoOfUnblockedCells() == 4);  // Counters should not change
+    assert(matrix.getNoOfBlockedCells() == 0);
+    
+    // Block a cell, then try to block it again
+    assert(matrix.setCell(0, 0, true) == true);   // Block cell
+    assert(matrix.setCell(0, 0, true) == true);   // Try to block again - should return true
+    assert(matrix.isUnblocked(0, 0) == false);    // Should still be blocked
+    assert(matrix.getNoOfUnblockedCells() == 3);  // Counters should not change from second call
+    assert(matrix.getNoOfBlockedCells() == 1);
+    
+    std::cout << "✓ testSetCellSameState passed\n";
 }
 
 /**
@@ -263,12 +296,13 @@ void test_error_handling() {
 int main() {
     std::cout << "Starting MatrixUtils tests...\n";
     
-    test_matrix_creation();
-    test_matrix_exceptions();
-    test_cell_operations();
-    test_get_total_cells();
-    test_count_unblocked_neighbors();
-    test_error_handling();
+    testMatrixCreation();
+    testMatrixExceptions();
+    testCellOperations();
+    testGetTotalCells();
+    testCountUnblockedNeighbors();
+    testErrorHandling();
+    testSetCellSameState();
     
     std::cout << "All MatrixUtils tests passed!\n";
     return 0;

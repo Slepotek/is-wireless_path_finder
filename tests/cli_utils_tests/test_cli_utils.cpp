@@ -26,7 +26,7 @@ void testBasicParameterParsing()
 {
     std::cout << "Testing basic parameter parsing..." << std::endl;
 
-    const std::vector<std::string> args = {"is-wireless", "--rows", "5", "--cols", "8", "--pathLength", "12"};
+    const std::vector<std::string> args = {"pathFinder", "--rows", "5", "--cols", "8", "--pathLength", "12"};
     size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
 
     CLIParameters params = CLIParser(argc, args);
@@ -55,7 +55,7 @@ void testMaxStartingPointsParsing()
     std::cout << "Testing maxStartingPoints parameter..." << std::endl;
 
     const std::vector<std::string> args =
-        {"is-wireless", "--rows", "3", "--cols", "3", "--pathLength", "4", "--maxStartingPoints", "10"};
+        {"pathFinder", "--rows", "3", "--cols", "3", "--pathLength", "4", "--maxStartingPoints", "10"};
     size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
 
     CLIParameters params = CLIParser(argc, args);
@@ -83,7 +83,7 @@ void testBlockedCellsParsing()
     std::cout << "Testing blocked cells parsing..." << std::endl;
 
     const std::vector<std::string> args =
-        {"is-wireless", "--rows", "4", "--cols", "4", "--pathLength", "6", "--blockedCells", "{1,0}", "{2,1}", "{0,3}"};
+        {"pathFinder", "--rows", "4", "--cols", "4", "--pathLength", "6", "--blockedCells", "{1,0}", "{2,1}", "{0,3}"};
     size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
 
     CLIParameters params = CLIParser(argc, args);
@@ -113,7 +113,7 @@ void testCompleteParameterSet()
 {
     std::cout << "Testing complete parameter set..." << std::endl;
 
-    const std::vector<std::string> args = {"is-wireless",
+    const std::vector<std::string> args = {"pathFinder",
                                            "--rows",
                                            "6",
                                            "--cols",
@@ -141,11 +141,42 @@ void testCompleteParameterSet()
 }
 
 /**
+ * @brief Tests blocked cells file parameter parsing functionality
+ * 
+ * Validates parsing of blocked cell coordinates from file using --blockedCellsFile parameter.
+ * Tests the file reading logic, comment handling, and coordinate extraction.
+ * Uses a test file with known coordinates to verify correct parsing.
+ * 
+ * Test case: --blockedCellsFile test_blocked_cells.txt
+ * Expected: 3 blocked cells parsed from file (0,1), (1,0), (2,2)
+ */
+void testBlockedCellsFileParsing()
+{
+    std::cout << "Testing blocked cells file parsing..." << std::endl;
+
+    const std::vector<std::string> args = {"pathFinder", "--rows", "4", "--cols", "4", "--pathLength", "6", 
+                                           "--blockedCellsFile", "/home/marcel/Code/is-wireless/tests/cli_utils_tests/test_blocked_cells.txt"};
+    size_t argc = args.size();
+
+    CLIParameters params = CLIParser(argc, args);
+
+    assert(params.rows == 4);
+    assert(params.cols == 4);
+    assert(params.pathLength.value == 6);
+    assert(params.blockedCells.size() == 3);
+    assert(params.blockedCells[0].first == 0 && params.blockedCells[0].second == 1);
+    assert(params.blockedCells[1].first == 1 && params.blockedCells[1].second == 0);
+    assert(params.blockedCells[2].first == 2 && params.blockedCells[2].second == 2);
+
+    std::cout << "✓ Blocked cells file parsing test passed" << std::endl;
+}
+
+/**
  * @brief Main test runner for CLI utilities test suite
  * 
  * Executes all CLI parsing test functions in sequence and reports results.
- * Tests cover basic parsing, optional parameters, blocked cells, and complete
- * parameter sets. Uses assert() for validation - program terminates on failure.
+ * Tests cover basic parsing, optional parameters, blocked cells, file input,
+ * and complete parameter sets. Uses assert() for validation - program terminates on failure.
  * 
  * @return 0 on success (all tests passed), program terminates on assertion failure
  */
@@ -157,6 +188,7 @@ int main()
     testMaxStartingPointsParsing();
     testBlockedCellsParsing();
     testCompleteParameterSet();
+    testBlockedCellsFileParsing();
 
     std::cout << "\n✓ All CLI Utils tests passed!" << std::endl;
     return 0;

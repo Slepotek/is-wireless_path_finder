@@ -145,16 +145,16 @@ bool MatrixWorld::matrixIsEmpty() const
 }
 
 /**
- * @brief Sets individual cell state with bounds checking
+ * @brief Sets individual cell state with bounds checking and counter management
  * 
  * Uses getIndex() for coordinate validation and bounds checking.
- * Does not update cell counters - caller responsible for counter management.
+ * Automatically updates cell counters when state changes occur.
  * Catches exceptions from getIndex() and converts to bool return.
  * 
  * @param row Row coordinate (0-based)
  * @param col Column coordinate (0-based)
  * @param state New cell state (true=blocked, false=unblocked)
- * @return true on success, false if coordinates invalid or matrix empty
+ * @return true on success (including when cell already in desired state), false if coordinates invalid or matrix empty
  */
 bool MatrixWorld::setCell(uint16_t row, uint16_t col, bool state)
 {
@@ -183,10 +183,6 @@ bool MatrixWorld::setCell(uint16_t row, uint16_t col, bool state)
                     noOfUnblockedCells++;
                 }
             }
-        }
-        else
-        {
-            return false;
         }
         return true;
     }

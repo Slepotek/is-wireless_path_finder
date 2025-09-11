@@ -1,0 +1,5 @@
+# Test blocked cells file for CLI testing
+# Format: row,col
+0,1
+1,0
+2,2

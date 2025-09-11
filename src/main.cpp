@@ -52,33 +52,36 @@ int main(int argc, char *argv[])
 
     // Parse command line arguments (may throw exceptions for invalid input)
     CLIParameters params = CLIParser(argc_size, args);
-    
     // Output parsed parameters for verification and debugging
     std::cout << "Rows: " << params.rows << std::endl;
     std::cout << "Cols: " << params.cols << std::endl;
     std::cout << "Path Length: " << params.pathLength.value << std::endl;
     std::cout << "Max Starting Points: " << params.maxStartingPoints.value << std::endl;
     std::cout << "Blocked Cells: ";
-    for (const auto &cell : params.blockedCells)
+    for (auto iterator = params.blockedCells.begin();
+         // limit output to first 100 blocked cells to avoid flooding console
+         iterator != params.blockedCells.end() &&
+         std::distance(params.blockedCells.begin(), iterator) < MAX_PATH_PRINT_LENGTH;
+         ++iterator)
     {
-        std::cout << "{" << cell.first << "," << cell.second << "} ";
+        std::cout << "{" << iterator->first << "," << iterator->second << "} ";
     }
     std::cout << std::endl;
-    
+
     // Create matrix world with specified dimensions
     MatrixWorld matrix(params.rows, params.cols);
-    
+
     // Block specified cells (validate success)
     if (!matrix.matrixBlanking(params.blockedCells))
     {
         std::cerr << "Error: Failed to block specified cells. Check coordinates are within matrix bounds." << std::endl;
         return 1;
     }
-    
+
     // Execute DFS path finding algorithm
     DFSAlgorithm dfs;
     Path path = dfs.findViablePath(matrix, params.pathLength, params.maxStartingPoints);
-    
+
     // Output results
     if (path.isEmpty())
     {

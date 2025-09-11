@@ -13,6 +13,8 @@
 #include <deque>
 #include <utility>
 
+#define MAX_PATH_PRINT_LENGTH 100
+
 /**
  * @class Path
  * @brief Path representation for adaptive path finding algorithm
