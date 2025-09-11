@@ -215,22 +215,9 @@ public:
 
 ## 🎯 Future Enhancements
 
-- **Qt GUI Implementation** - Visual path rendering and interactive matrix editing
-- **Additional Algorithms** - BFS, A*, Dijkstra implementations
+- **Additional Algorithms** - A* implementations
 - **Performance Tracing** - Detailed algorithm performance analysis
 - **Advanced Optimization** - Hierarchical pathfinding for large matrices
-
-## 📄 License
-
-This project is developed as part of academic/research work. See project documentation for specific usage terms.
-
-## 🤝 Contributing
-
-The codebase follows professional C++ standards with comprehensive documentation and testing. All contributions should maintain the established quality standards including:
-- Complete Doxygen documentation
-- Comprehensive test coverage
-- Memory leak-free implementation
-- Exception-safe error handling
 
 ---
 
