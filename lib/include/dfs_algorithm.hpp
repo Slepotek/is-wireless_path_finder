@@ -24,6 +24,20 @@
  */
 class DFSAlgorithm : public PathAlgorithm
 {
+private:
+    /**
+     * @brief Recursive DFS implementation with backtracking
+     * @param matrixWorld Reference to the matrix world
+     * @param currentPath Current path being built
+     * @param visited Visited cells tracking
+     * @param targetLength Target path length
+     * @return true if target length reached, false otherwise
+     */
+    bool dfsRecursive(const MatrixWorld &matrixWorld,
+                      Path &currentPath,
+                      std::vector<std::vector<bool>> &visited,
+                      uint16_t targetLength);
+
 public:
     /**
      * @brief Finds a viable path of specified length using DFS
@@ -52,20 +66,6 @@ public:
     {
         return "Depth-First Search (DFS) Algorithm";
     }
-
-private:
-    /**
-     * @brief Recursive DFS implementation with backtracking
-     * @param matrixWorld Reference to the matrix world
-     * @param currentPath Current path being built
-     * @param visited Visited cells tracking
-     * @param targetLength Target path length
-     * @return true if target length reached, false otherwise
-     */
-    bool dfsRecursive(const MatrixWorld &matrixWorld,
-                      Path &currentPath,
-                      std::vector<std::vector<bool>> &visited,
-                      uint16_t targetLength);
 };
 
 #endif

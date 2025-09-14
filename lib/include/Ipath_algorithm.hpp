@@ -3,6 +3,7 @@
 
 #include "matrix_utils.hpp"
 #include "path.hpp"
+#include "performance_measure.hpp"
 #include <string>
 
 // Type-safe structures for clarity and error avoidance
@@ -39,7 +40,7 @@ struct MaxStartingPoints
  * 
  * @note This is a pure virtual interface - cannot be instantiated directly
  */
-class PathAlgorithm
+class PathAlgorithm : public PerformanceMeasure
 {
 public:
     virtual ~PathAlgorithm() = default;

@@ -7,6 +7,7 @@
  */
 
 #include "cli_utils.hpp"
+#include "performance_guard.hpp"
 #include <cstddef>
 #include <cstdio>
 #include <iostream>
@@ -38,12 +39,14 @@ OPTIONAL:
     --maxStartingPoints N   Maximum starting points to try (default: 5)
     --blockedCells COORDS   Blocked cell coordinates (e.g., --blockedCells {1,0} {2,1})
     --blockedCellsFile FILE Path to file containing blocked cell coordinates
+    --enableMeasurement     Enable performance measurements (wall time and cycles) [*sudo required]
     --help, -h              Show this help message
 
 EXAMPLES:
     pathFinder --rows 5 --cols 5 --pathLength 6
     pathFinder --rows 8 --cols 8 --pathLength 12 --blockedCells {1,0} {2,0} {1,1}
     pathFinder --rows 10 --cols 10 --pathLength 15 --maxStartingPoints 10
+    sudo pathFinder --rows 10 --cols 10 --pathLength 15 --maxStartingPoints 10 --enableMeasurement
     pathFinder --rows 100 --cols 100 --pathLength 50 --blockedCellsFile blocked_cells.txt
 
 BLOCKED CELLS FILE FORMAT:
@@ -194,6 +197,9 @@ CLIParameters CLIParser(size_t argc, std::vector<std::string> argv) {
         }
         else if (argv[index] == std::string("--blockedCellsFile") && index + 1 < argc) {
             extractBlockedCellsFromFile(argv[++index], params);
+        }
+        else if (argv[index] == std::string("--enableMeasurement")) {
+            PerformanceMeasureGuard::isMeasurementEnabled=true;
         }
     }
     return params;

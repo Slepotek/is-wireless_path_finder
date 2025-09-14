@@ -37,7 +37,7 @@ void testBasicPathFinding()
     DFSAlgorithm dfs;
     
     // Find path of length 4 with default maxStartingPoints
-    Path result = dfs.findViablePath(world, {4}, {5}); // Fixed: Added missing MaxStartingPoints parameter
+    Path result = dfs.findViablePath(world, {4}, {5});
     
     assert(!result.isEmpty());
     assert(result.getLength() == 4);
@@ -74,7 +74,7 @@ void testPathFindingWithBlockedCells()
     world.setCell(1, 2, true);
     
     DFSAlgorithm dfs;
-    Path result = dfs.findViablePath(world, {6}, {5}); // Fixed: Added missing MaxStartingPoints parameter
+    Path result = dfs.findViablePath(world, {6}, {5});
     
     assert(!result.isEmpty());
     assert(result.getLength() == 6);
@@ -115,7 +115,7 @@ void testImpossiblePath()
     }
     
     DFSAlgorithm dfs;
-    Path result = dfs.findViablePath(world, {3}, {5}); // Fixed: Added missing MaxStartingPoints parameter
+    Path result = dfs.findViablePath(world, {3}, {5});
     
     assert(result.isEmpty());
     
@@ -148,7 +148,7 @@ void testExceptionHandling()
     // Test zero path length
     bool exceptionThrown = false;
     try {
-        UNUSED(dfs.findViablePath(world, {0}, {5})); // Fixed: Added missing MaxStartingPoints parameter
+        UNUSED(dfs.findViablePath(world, {0}, {5}));
     } catch (const std::invalid_argument &e) {
         exceptionThrown = true;
     }
@@ -157,7 +157,7 @@ void testExceptionHandling()
     // Test path length exceeding matrix size
     exceptionThrown = false;
     try {
-        UNUSED(dfs.findViablePath(world, {20}, {5})); // Fixed: Added missing MaxStartingPoints parameter
+        UNUSED(dfs.findViablePath(world, {20}, {5}));
     } catch (const std::invalid_argument &e) {
         exceptionThrown = true;
     }
@@ -185,7 +185,6 @@ void testExceptionHandling()
 int main()
 {
     std::cout << "=== DFS Algorithm Test Suite ===" << std::endl;
-
     try {
         testBasicPathFinding();
         testPathFindingWithBlockedCells();

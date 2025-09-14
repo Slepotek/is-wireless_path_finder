@@ -14,7 +14,7 @@
 - **Type-Safe CLI Interface** with comprehensive parameter validation
 - **Professional Testing Suite** with 100% coverage and memory leak detection
 - **Robust Error Handling** with meaningful user feedback
-- **Cross-Platform Build System** using CMake and modern C++17
+- **Performance measurement** using wall time and cycle count from perf_event
 
 ## 🎯 What It Does
 
@@ -43,7 +43,7 @@ The application solves the **Adaptive Path Finding Problem**:
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **C++17 compatible compiler** (GCC 7+, Clang 5+)
+- **Compatible compiler** (GCC 11+, Clang 12+)
 - **CMake 3.10+**
 - **Make** build system
 - **Valgrind** (optional, for memory leak detection)
@@ -76,6 +76,9 @@ make test_proj
 # With blocked cells and custom starting points
 ./pathFinder --rows 8 --cols 8 --pathLength 12 --maxStartingPoints 10 --blockedCells "{1,0}" "{2,1}" "{3,2}"
 
+# With blocked cells, custom starting points and performance measurement
+sudo ./pathFinder --rows 8 --cols 8 --pathLength 12 --maxStartingPoints 10 --blockedCells "{1,0}" "{2,1}" "{3,2}" --enableMeasurement
+
 # Show help
 ./pathFinder --help
 ```
@@ -91,19 +94,6 @@ make test_proj
 - `--maxStartingPoints N` - Maximum starting points to try (default: 5)
 - `--blockedCells COORDS` - Blocked cell coordinates (e.g., `--blockedCells "{1,0}" "{2,1}"`)
 - `--help, -h` - Show detailed help message
-
-### Examples
-
-```bash
-# Basic path finding
-pathFinder --rows 5 --cols 5 --pathLength 6
-
-# Complex scenario with obstacles
-pathFinder --rows 10 --cols 10 --pathLength 15 --blockedCells "{0,0}" "{1,1}" "{2,2}"
-
-# Thorough search with more starting points
-pathFinder --rows 8 --cols 8 --pathLength 20 --maxStartingPoints 15
-```
 
 ## 🧪 Testing
 
@@ -139,12 +129,6 @@ cd tools
 # (small (100x100 matrix), medium (200x200 matrix), large (500x500 matrix))
 ```
 
-### Test Results
-```
-100% tests passed, 0 tests failed out of 11
-Total Test time (real) = 3.50 sec
-```
-
 ## 📁 Project Structure
 
 ```
@@ -156,12 +140,17 @@ is-wireless/
 │   │   ├── path_finder_utils.hpp
 │   │   ├── dfs_algorithm.hpp
 │   │   ├── cli_utils.hpp
-│   │   └── Ipath_algorithm.hpp
+│   │   ├── Ipath_algorithm.hpp
+│   │   ├── performance_guard.hpp
+│   │   └── performance_measure.hpp
+|   |
 │   └── src/              # Implementation files
 │       ├── matrix_utils.cpp
 │       ├── path.cpp
 │       ├── path_finder_utils.cpp
 │       ├── dfs_algorithm.cpp
+│       ├── performance_guard.cpp
+│       ├── performance_measure.cpp
 │       └── cli_utils.cpp
 ├── tests/                 # Comprehensive test suite
 │   ├── matrix_utils_tests/
@@ -186,7 +175,7 @@ is-wireless/
 - **clangd Support** - LSP integration with compile_commands.json
 
 ### Code Quality
-- **C++17 Standard** - Modern C++ features and safety
+- **C++20 Standard** - Modern C++ features and safety
 - **Doxygen Documentation** - Complete API documentation
 - **Exception Safety** - RAII patterns and proper error handling
 - **Memory Safety** - Zero memory leaks detected
@@ -216,9 +205,7 @@ public:
 ## 🎯 Future Enhancements
 
 - **Additional Algorithms** - A* implementations
-- **Performance Tracing** - Detailed algorithm performance analysis
+- **Multithreading** - Algorithm parallelization for performance gains
 - **Advanced Optimization** - Hierarchical pathfinding for large matrices
 
 ---
-
-**Built with modern C++17, CMake, and professional software engineering practices.**

@@ -27,7 +27,7 @@ void testBasicParameterParsing()
     std::cout << "Testing basic parameter parsing..." << std::endl;
 
     const std::vector<std::string> args = {"pathFinder", "--rows", "5", "--cols", "8", "--pathLength", "12"};
-    size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
+    size_t argc = args.size();
 
     CLIParameters params = CLIParser(argc, args);
 
@@ -56,7 +56,7 @@ void testMaxStartingPointsParsing()
 
     const std::vector<std::string> args =
         {"pathFinder", "--rows", "3", "--cols", "3", "--pathLength", "4", "--maxStartingPoints", "10"};
-    size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
+    size_t argc = args.size();
 
     CLIParameters params = CLIParser(argc, args);
 
@@ -84,7 +84,7 @@ void testBlockedCellsParsing()
 
     const std::vector<std::string> args =
         {"pathFinder", "--rows", "4", "--cols", "4", "--pathLength", "6", "--blockedCells", "{1,0}", "{2,1}", "{0,3}"};
-    size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
+    size_t argc = args.size();
 
     CLIParameters params = CLIParser(argc, args);
 
@@ -125,7 +125,7 @@ void testCompleteParameterSet()
                                            "--blockedCells",
                                            "{0,0}",
                                            "{1,1}"};
-    size_t argc = args.size(); // Fixed: CLIParser expects size_t, not int
+    size_t argc = args.size();
 
     CLIParameters params = CLIParser(argc, args);
 

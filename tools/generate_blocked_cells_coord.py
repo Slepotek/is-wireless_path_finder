@@ -198,7 +198,8 @@ def run_cli_with_blocked_cells(file_paths_dict, spinner):
             "--rows", str(rows),
             "--cols", str(cols), 
             "--pathLength", str(path_length),
-            "--blockedCellsFile", blocked_cells_file
+            "--blockedCellsFile", blocked_cells_file,
+            "--enableMeasurement"
         ]
         spinner.start()
         result = subprocess.run(cmd, capture_output=True, text=True)

@@ -27,15 +27,17 @@
  * 
  * Complexity: O(4^L × S) where L is path length and S is starting points tried
  */
-Path DFSAlgorithm::findViablePath(const MatrixWorld &matrixWorld, 
-                                  PathLength pathLength, 
+Path DFSAlgorithm::findViablePath(const MatrixWorld &matrixWorld,
+                                  PathLength pathLength,
                                   MaxStartingPoints maxStartingPoints)
 {
-    if (pathLength.value == 0) {
+    if (pathLength.value == 0)
+    {
         throw std::invalid_argument("Path length must be greater than zero");
     }
 
-    if (pathLength.value > matrixWorld.getTotalCells()) {
+    if (pathLength.value > matrixWorld.getTotalCells())
+    {
         throw std::invalid_argument("Path length exceeds matrix size");
     }
 
@@ -43,7 +45,7 @@ Path DFSAlgorithm::findViablePath(const MatrixWorld &matrixWorld,
     while (!pathFinder.getIsExhausted())
     {
         auto startingPoints = pathFinder.findStartingPointCandidates(matrixWorld, maxStartingPoints.value);
-
+        
         // Try each starting point
         for (const auto &start : startingPoints)
         {
@@ -92,18 +94,20 @@ bool DFSAlgorithm::dfsRecursive(const MatrixWorld &matrixWorld,
                                 uint16_t targetLength)
 {
     // Base case: reached target length
-    if (currentPath.getLength() == targetLength) {
+    if (currentPath.getLength() == targetLength)
+    {
         return true;
     }
-    
+
     // Get current position
     auto [currentRow, currentCol] = currentPath.getCurrentCoordinate();
-    
+
     // 4-directional movement: up, down, left, right
     // Keeping standard ints for arithmetic
     std::array<std::array<int, 2>, 4> directions = {{{-1, 0}, {0, 1}, {1, 0}, {0, -1}}};
 
-    for (auto & direction : directions) {
+    for (auto &direction : directions)
+    {
         int newRow = static_cast<int>(currentRow) + direction[0];
         int newCol = static_cast<int>(currentCol) + direction[1];
 
@@ -112,16 +116,17 @@ bool DFSAlgorithm::dfsRecursive(const MatrixWorld &matrixWorld,
             newCol >= 0 && newCol < static_cast<int>(matrixWorld.getRowSize()) &&
             !visited[newRow][newCol] && 
             matrixWorld.isUnblocked(static_cast<uint16_t>(newRow), static_cast<uint16_t>(newCol))) {
-            
+
             // Mark as visited and add to path
             visited[newRow][newCol] = true;
             currentPath.addCoordinate(static_cast<uint16_t>(newRow), static_cast<uint16_t>(newCol));
-            
+
             // Recursive call
-            if (dfsRecursive(matrixWorld, currentPath, visited, targetLength)) {
+            if (dfsRecursive(matrixWorld, currentPath, visited, targetLength))
+            {
                 return true;
             }
-            
+
             // Backtrack
             (void)currentPath.getNextCoordinate(); // Remove last coordinate
             visited[newRow][newCol] = false;
